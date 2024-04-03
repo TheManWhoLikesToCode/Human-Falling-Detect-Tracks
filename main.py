@@ -128,7 +128,12 @@ if __name__ == '__main__':
             # VISUALIZE.
             if args.show_detected:
                 for bb in detected[:, 0:5]:
-                    frame = cv2.rectangle(frame, (bb[0], bb[1]), (bb[2], bb[3]), (0, 0, 255), 1)
+                    x1 = int(bb[0].item())
+                    y1 = int(bb[1].item())
+                    x2 = int(bb[2].item())
+                    y2 = int(bb[3].item())
+                    frame = cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 255), 1)
+
 
         # Update tracks by matching each track information of current and previous frame or
         # create a new track if no matched.

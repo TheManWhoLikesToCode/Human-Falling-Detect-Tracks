@@ -21,8 +21,8 @@ class TSSTG(object):
         self.num_class = len(self.class_names)
         self.device = device
 
-        self.model = TwoStreamSpatialTemporalGraph(self.graph_args, self.num_class).to(self.device)
-        self.model.load_state_dict(torch.load(weight_file))
+        self.model = TwoStreamSpatialTemporalGraph(self.graph_args, self.num_class).to(torch.device('cpu'))
+        self.model.load_state_dict(torch.load(weight_file, map_location=torch.device('cpu')))
         self.model.eval()
 
     def predict(self, pts, image_size):
@@ -44,8 +44,9 @@ class TSSTG(object):
         pts = pts.permute(2, 0, 1)[None, :]
 
         mot = pts[:, :2, 1:, :] - pts[:, :2, :-1, :]
-        mot = mot.to(self.device)
-        pts = pts.to(self.device)
+        mot = mot.to(torch.device("cpu"))
+        if torch.cuda.is_available():
+            pts = pts.to(self.device)
 
         out = self.model((pts, mot))
 

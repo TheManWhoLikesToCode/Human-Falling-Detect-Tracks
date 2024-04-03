@@ -23,7 +23,7 @@ class SPPE_FastPose(object):
         if backbone == 'resnet101':
             self.model = InferenNet_fast().to(device)
         else:
-            self.model = InferenNet_fastRes50().to(device)
+            self.model = InferenNet_fastRes50().to(torch.device('cpu'))
         self.model.eval()
 
     def predict(self, image, bboxs, bboxs_scores):
